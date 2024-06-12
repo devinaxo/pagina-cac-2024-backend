@@ -1,0 +1,7 @@
+{
+	"test": "works",
+	"features":{
+		"works": true,
+		"iscool": true
+	}
+}

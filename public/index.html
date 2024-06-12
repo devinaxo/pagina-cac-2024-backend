@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alquileres Shaggy</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="options">
+            <h1>Alquileres Shaggy</h1>
+            <hr>
+            <a href="/alquileres" target="_blank">Ver alquileres</a>
+            <hr>
+            <a href="/clientes" target="_blank">Ver clientes</a>
+            <hr>
+            <a href="/videojuegos" target="_blank">Ver videojuegos</a>
+        </div>
+        <div>
+            <hr>
+            <h2>Rentar un videojuego</h2>
+            <hr>
+            <form id="formularioRenta" class="form-container">
+                <div class="input-container">
+                    <label for="cliente">Cliente:</label>
+                    <select name="id_cliente" id="cliente">
+                        <option value="" disabled selected>Seleccione un cliente</option>
+                    </select>
+                </div>
+
+                <div class="input-container">
+                    <label for="videojuego">Videojuego:</label>
+                    <select name="id_videojuego" id="videojuego">
+                        <option value="" disabled selected>Seleccione un videojuego</option>
+                    </select>
+                </div>
+
+                <div class="input-container">
+                    <label for="fecha_alquiler">Fecha de alquiler:</label>
+                    <input type="date" id="fecha_alquiler" name="fecha_alquiler" required>
+                </div>
+
+                <div class="input-container">
+                    <label for="fecha_retorno">Fecha de retorno:</label>
+                    <input type="date" id="fecha_retorno" name="fecha_retorno" required>
+                </div>
+
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>
