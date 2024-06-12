@@ -23,31 +23,46 @@
             <hr>
             <form id="formularioRenta" class="form-container">
                 <div class="input-container">
-                    <label for="cliente">Cliente:</label>
-                    <select name="id_cliente" id="cliente">
-                        <option value="" disabled selected>Seleccione un cliente</option>
-                    </select>
+                    <label for="cliente">Su nombre:</label>
+                    <input type="text" id="cliente" name="id_cliente" required>
                 </div>
-
                 <div class="input-container">
                     <label for="videojuego">Videojuego:</label>
-                    <select name="id_videojuego" id="videojuego">
+                    <select name="id_videojuego" id="videojuego" required>
                         <option value="" disabled selected>Seleccione un videojuego</option>
                     </select>
                 </div>
-
                 <div class="input-container">
                     <label for="fecha_alquiler">Fecha de alquiler:</label>
                     <input type="date" id="fecha_alquiler" name="fecha_alquiler" required>
                 </div>
-
                 <div class="input-container">
                     <label for="fecha_retorno">Fecha de retorno:</label>
                     <input type="date" id="fecha_retorno" name="fecha_retorno" required>
                 </div>
-
                 <button type="submit">Enviar</button>
             </form>
+        </div>
+        <div>
+            <hr>
+            <h2>¿Aún no es cliente? <u>¡Regístrese!</u></h2>
+            <hr>
+            <form id="formularioRenta" class="form-container">
+                <div class="input-container">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+                <div class="input-container">
+                    <label for="email">E-Mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-container">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="text" id="telefono" name="telefono" required>
+                </div>
+                <button type="submit">Enviar</button>
+            </form>
+            <hr>
         </div>
     </div>
     <script src="index.js"></script>

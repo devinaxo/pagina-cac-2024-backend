@@ -47,18 +47,35 @@ app.get('/' + pages[0], (req, res) => {
         res.json(results);
     })
 })
-//Página de clientes
+//Páginas de clientes
 app.get('/' + pages[1], (req, res) => {
-    let sql = 'SELECT * FROM ' + pages[1];
-    conn.query(sql, (err, results) => {
-        if(err){
-            console.log('Failed querying or smth');
-            res.status(404).json({'query': sql, 'err': err});
+    const nombreCliente = decodeURIComponent(req.query.name);
+    if (nombreCliente != 'undefined') {
+        const query = 'SELECT id_cliente FROM clientes WHERE nombre = ?';
+        conn.query(query, [nombreCliente], (err, results) => {
+        if (err) {
+            console.error('Error querying the database:', err);
+            res.status(500).json({ error: 'Error interno' });
             return;
         }
-        res.json(results);
-    })
-})
+        if (results.length > 0) {
+            res.json({ id_cliente: results[0].id_cliente });
+        } else {
+            res.status(404).json({ error: 'El cliente no está registrado' });
+        }
+    });
+    } else {
+        let sql = 'SELECT * FROM ' + pages[1];
+        conn.query(sql, (err, results) => {
+            if (err) {
+                console.log('Failed querying or smth');
+                res.status(404).json({ 'query': sql, 'err': err });
+                return;
+            }
+            res.json(results);
+        });
+    }
+});
 //Página de videojuegos
 app.get('/' + pages[2], (req, res) => {
     let sql = 'SELECT * FROM ' + pages[2];
