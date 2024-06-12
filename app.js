@@ -76,6 +76,35 @@ app.get('/' + pages[1], (req, res) => {
         });
     }
 });
+//POST para registrar nuevo cliente
+app.post('/clientes', (req, res) => {
+    const { nombre, email, telefono } = req.body;
+
+    // Veo si el mail o el teléfono ya están registrados
+    const checkQuery = 'SELECT * FROM clientes WHERE email = ? OR telefono = ?';
+    conn.query(checkQuery, [email, telefono], (err, results) => {
+        if (err) {
+            console.error('Error:', err);
+            res.status(500).json({ error: 'Error interno' });
+            return;
+        }
+        
+        if (results.length > 0) {
+            res.status(400).json({ error: 'El cliente ya está registrado' });
+        } else {
+            // Insertar el nuevo cliente a la tabla
+            const insertQuery = 'INSERT INTO clientes (nombre, email, telefono) VALUES (?, ?, ?)';
+            conn.query(insertQuery, [nombre, email, telefono], (err, results) => {
+                if (err) {
+                    console.error('Error inserting into database:', err);
+                    res.status(500).json({ error: 'Error interno' });
+                    return;
+                }
+                res.status(201).json({ message: 'Cliente registrado exitosamente' });
+            });
+        }
+    });
+});
 //Página de videojuegos
 app.get('/' + pages[2], (req, res) => {
     let sql = 'SELECT * FROM ' + pages[2];

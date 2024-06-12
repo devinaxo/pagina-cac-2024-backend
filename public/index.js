@@ -80,4 +80,46 @@ document.addEventListener('DOMContentLoaded', function(){
                 e.target.reset();
             }
         });
-})})
+    })
+    document.getElementById('formularioCliente').addEventListener('submit', function(e) {
+        e.preventDefault();
+    
+        const nombreInput = document.getElementById('nombre').value;
+        const emailInput = document.getElementById('email').value;
+        const telefonoInput = document.getElementById('telefono').value;
+    
+        // Validación básica
+        if (!nombreInput || !emailInput || !telefonoInput) {
+            alert('Por favor complete todos los campos.');
+            return;
+        }
+    
+        // Mandar POST para registrar nuevo cliente
+        fetch('/clientes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                nombre: nombreInput,
+                email: emailInput,
+                telefono: telefonoInput
+            })
+        })
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error('No se pudo registrar el cliente.');
+            }
+        })
+        .then(data => {
+            alert('Cliente registrado exitosamente.');
+            e.target.reset();
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            alert('No se pudo registrar el cliente. Verifique los datos e intente nuevamente.');
+        });
+    });
+})
