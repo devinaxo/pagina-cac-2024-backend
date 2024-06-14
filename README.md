@@ -1,5 +1,6 @@
 #  Alquileres Shaggy (Nombre en trabajo)
 Backend simple para una página de renta de videojuegos.
+Puede ser visitada en mi host de elección [Glitch](https://pagina-cac-2024-backend.glitch.me/).
 
 ##  Requerimientos
 Para cumplir con las condiciones del proyecto, debe contener las siguientes especificaciones:
@@ -11,6 +12,6 @@ Para cumplir con las condiciones del proyecto, debe contener las siguientes espe
 - [x] [15] Se debe poder acceder a los registros de la tabla (GET)
 - [x] [15] Se debe poder realizar borrado físico de los datos. (DELETE)
 - [x] [5] El trabajo práctico deberá subirse y compartirse mediante un repositorio de Git. (Mandatorio)
-- [ ] [5] La página deberá subirse a un servidor on-line para poder ser navegada por el Docente. (Mandatorio)
+- [x] [5] La página deberá subirse a un servidor on-line para poder ser navegada por el Docente. (Mandatorio)
 - [ ] [5] Se valorará la aplicación de un token o método de autenticación.
 - [x] [5] El backend debe estar integrado con un frontend. (~)
