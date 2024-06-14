@@ -21,8 +21,7 @@ exports.addAlquiler = function(req, res) {
     } = req.body;
 
     if(id_cliente == null || id_videojuego == null || fecha_alquiler == null || fecha_retorno == null){
-        res.status(500).json({error: 'Error interno'});
-        return;
+        return res.status(500).json({error: 'Uno de los valores ingresados es nulo.'});
     }
 
     const query = 'INSERT INTO alquileres (id_cliente, id_videojuego, fecha_alquiler, fecha_retorno) VALUES (?, ?, ?, ?)';
@@ -31,9 +30,9 @@ exports.addAlquiler = function(req, res) {
     conn.query(query, valores, (err, results) => {
         if(err){
             console.error('Error ejecutando query: ', err);
-            res.status(500).json({error: 'Error interno'});
+            res.status(500).json({error: 'Error interno.'});
             return;
         }
-        res.status(201).json({mensaje: 'Alquiler agregado exitosamente'});
+        res.status(201).json({mensaje: 'Alquiler agregado exitosamente.'});
     });
 }

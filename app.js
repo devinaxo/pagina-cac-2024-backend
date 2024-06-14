@@ -32,3 +32,9 @@ app.post('/clientes', clientesRouter.addCliente);
 
 //Página de videojuegos
 app.get('/videojuegos', videojuegosRouter.getAll);
+//POST para agregar un nuevo videojuego
+app.post('/videojuegos', videojuegosRouter.addVideojuego);
+//PUT para modificar un videojuego
+app.put('/videojuegos/:id', videojuegosRouter.modifyVideojuego);
+//DELETE para borrar un videojuego
+app.delete('/videojuegos/:id', videojuegosRouter.deleteVideojuego);
