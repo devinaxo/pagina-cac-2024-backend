@@ -82,7 +82,7 @@ exports.modifyVideojuego = function(req, res) {
             valores.push(id);
 
             conn.query(query, valores, (updErr, updResults) => {
-                if(err){
+                if(updErr){
                     console.error('Error ejecutando query: ', err);
                     return res.status(500).json({error: 'Error interno.'});
                 }
@@ -92,14 +92,43 @@ exports.modifyVideojuego = function(req, res) {
     });
 }
 
+//Si borramos un videojuego, debemos borrar los alquileres relacionados a ese videojuego
 exports.deleteVideojuego = function(req, res) {
     const id = req.params.id;
-    const query = 'DELETE FROM videojuegos WHERE id_videojuego = ?'
 
-    conn.query(query, id, (err, results) => {
-        if(err){
-            return res.status(500).json({error: 'Error interno.'});
+    //Lo realizamos en una transacción para poder volver los cambios si algo sale mal
+    conn.beginTransaction((err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error interno al iniciar la transacción.' });
         }
-        res.status(201).json({mensaje: 'Videojuego borrado exitosamente.'});
-    })
+        let query = 'DELETE FROM alquileres WHERE id_videojuego = ?';
+        conn.query(query, id, (err, results) => {
+            if (err) {
+                return conn.rollback(() => {
+                    res.status(500).json({ error: 'Error interno al borrar alquileres.' });
+                });
+            }
+            query = 'DELETE FROM videojuegos WHERE id_videojuego = ?';
+            conn.query(query, id, (err, results) => {
+                if (err) {
+                    return conn.rollback(() => {
+                        res.status(500).json({ error: 'Error interno.' });
+                    });
+                }
+                if (results.affectedRows == 0) {
+                    return conn.rollback(() => {
+                        res.status(404).json({ error: 'No se encontró el videojuego con el ID especificado.' });
+                    });
+                }
+                conn.commit((err) => {
+                    if (err) {
+                        return conn.rollback(() => {
+                            res.status(500).json({ error: 'Error interno al confirmar la transacción.' });
+                        });
+                    }
+                    res.status(200).json({ mensaje: 'Videojuego y alquileres asociados borrados exitosamente.' });
+                });
+            });
+        });
+    });
 }

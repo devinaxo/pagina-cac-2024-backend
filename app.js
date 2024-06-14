@@ -24,11 +24,19 @@ app.get('/', (req, res) => {
 app.get('/alquileres', alquileresRouter.getAll);
 //POST para agregar un alquiler
 app.post('/alquileres', alquileresRouter.addAlquiler);
+//PUT para modificar un alquiler
+app.put('/alquileres/:id', alquileresRouter.modifyAlquiler);
+//DELETE para borrar un alquiler
+app.delete('/alquileres/:id', alquileresRouter.deleteAlquiler);
 
 //Páginas de clientes
 app.get('/clientes', clientesRouter.getClientes);
 //POST para registrar nuevo cliente
 app.post('/clientes', clientesRouter.addCliente);
+//PUT para modificar un cliente
+app.put('/clientes/:id', clientesRouter.modifyCliente);
+//DELETE para borrar un cliente
+app.delete('/clientes/:id', clientesRouter.deleteCliente);
 
 //Página de videojuegos
 app.get('/videojuegos', videojuegosRouter.getAll);

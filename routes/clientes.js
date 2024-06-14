@@ -56,3 +56,96 @@ exports.addCliente = function(req, res) {
         }
     });
 }
+
+exports.modifyCliente = function(req, res){
+    const {
+        nombre,
+        email,
+        telefono
+    } = req.body;
+
+    if (nombre === undefined && email === undefined && telefono === undefined) {
+        return res.status(400).json({ error: 'No se proporcionaron campos para actualizar.' });
+    }
+
+    const id = req.params.id;
+    let query = 'SELECT * FROM clientes WHERE id_cliente = ?';
+    conn.query(query, id, (err, results) => {
+        if(err){
+            console.error('Error ejecutando query: ', err);
+            return res.status(500).json({error: 'Error interno.'});
+        }
+        if(results.length == 0){
+            return res.status(404).json({error: 'No se encontró el cliente con el ID especificado.'});
+        }else{
+
+            let updSQL = [];
+            let valores = [];
+
+            if (nombre !== undefined) {
+                updSQL.push('nombre = ?');
+                valores.push(nombre);
+            }
+            if (email !== undefined) {
+                updSQL.push('email = ?');
+                valores.push(email);
+            }
+            if (telefono !== undefined) {
+                updSQL.push('telefono = ?');
+                valores.push(telefono);
+            }
+
+            const query = `UPDATE clientes SET ${updSQL.join(', ')} WHERE id_cliente = ?`;
+            valores.push(id);
+
+            conn.query(query, valores, (updErr, updResults) => {
+                if(updErr){
+                    console.error('Error ejecutando query: ', err);
+                    return res.status(500).json({error: 'Error interno.'});
+                }
+                res.status(201).json({mensaje: 'Cliente actualizado exitosamente.'});
+            })
+        }
+    });
+}
+
+//Si borramos un cliente, debemos borrar los alquileres relacionados a ese cliente
+exports.deleteCliente = function(req, res) {
+    const id = req.params.id;
+
+    //Lo realizamos en una transacción para poder volver los cambios si algo sale mal
+    conn.beginTransaction((err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error interno al iniciar la transacción.' });
+        }
+        let query = 'DELETE FROM alquileres WHERE id_cliente = ?';
+        conn.query(query, id, (err, results) => {
+            if (err) {
+                return conn.rollback(() => {
+                    res.status(500).json({ error: 'Error interno al borrar alquileres.' });
+                });
+            }
+            query = 'DELETE FROM clientes WHERE id_cliente = ?';
+            conn.query(query, id, (err, results) => {
+                if (err) {
+                    return conn.rollback(() => {
+                        res.status(500).json({ error: 'Error interno.' });
+                    });
+                }
+                if (results.affectedRows == 0) {
+                    return conn.rollback(() => {
+                        res.status(404).json({ error: 'No se encontró el cliente con el ID especificado.' });
+                    });
+                }
+                conn.commit((err) => {
+                    if (err) {
+                        return conn.rollback(() => {
+                            res.status(500).json({ error: 'Error interno al confirmar la transacción.' });
+                        });
+                    }
+                    res.status(200).json({ mensaje: 'Cliente y alquileres asociados borrados exitosamente.' });
+                });
+            });
+        });
+    });
+}
