@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     document.getElementById('formularioRenta').addEventListener('submit', function(e){
         e.preventDefault();
-        
+
         const name = document.getElementById('cliente').value;
         const videogame = document.getElementById('videojuego').value;
         const initialD = rentalDateInput.value;
@@ -66,8 +66,7 @@ document.addEventListener('DOMContentLoaded', function(){
             alert('Todos los campos son obligatorios.');
             return;
         }
-        const clientNameInput = document.getElementById('cliente').value;
-        checkClientExists(clientNameInput).then(clientId => {
+        checkClientExists(name).then(clientId => {
             if (clientId !== null) {
                 const formData = new FormData(e.target);
                 formData.set('id_cliente', clientId); // Hacemos que id_cliente sea el valor de la bbdd
