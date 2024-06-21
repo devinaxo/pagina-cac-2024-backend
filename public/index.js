@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', function(){
+    document.getElementById('telefono').addEventListener("keypress", function(e) {
+        if (!/[0-9]/.test(e.key)) {
+            e.preventDefault();
+        }
+    });
     fetch('/videojuegos')
         .then(res => res.json())
         .then(videojuegos => {
@@ -10,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function(){
                 selectVideojuegos.appendChild(opcion);
             });
         });
-    
+
     const rentalDateInput = document.getElementById('fecha_alquiler');
     const returnDateInput = document.getElementById('fecha_retorno');
     
@@ -46,9 +51,19 @@ document.addEventListener('DOMContentLoaded', function(){
 
     document.getElementById('formularioRenta').addEventListener('submit', function(e){
         e.preventDefault();
-        if (rentalDateInput.value > returnDateInput.value) {
+        
+        const name = document.getElementById('cliente').value;
+        const videogame = document.getElementById('videojuego').value;
+        const initialD = rentalDateInput.value;
+        const finalD = returnDateInput.value;
+
+        if (initialD > finalD) {
             e.preventDefault();
             alert('Fecha de retorno debe ser después de fecha de alquiler.');
+            return;
+        }
+        if(!name || !videogame || !rentalDateInput.value || !returnDateInput.value){
+            alert('Todos los campos son obligatorios.');
             return;
         }
         const clientNameInput = document.getElementById('cliente').value;
