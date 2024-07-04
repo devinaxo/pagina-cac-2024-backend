@@ -1,9 +1,10 @@
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('telefono').addEventListener("keypress", function(e) {
         if (!/[0-9]/.test(e.key)) {
             e.preventDefault();
         }
     });
+
     fetch('/videojuegos')
         .then(res => res.json())
         .then(videojuegos => {
@@ -19,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function(){
     const rentalDateInput = document.getElementById('fecha_alquiler');
     const returnDateInput = document.getElementById('fecha_retorno');
     
-
     const today = new Date().toISOString().split('T')[0];
     rentalDateInput.min = today;
     returnDateInput.min = today;
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function(){
             });
     }
 
-    document.getElementById('formularioRenta').addEventListener('submit', function(e){
+    document.getElementById('formularioRenta').addEventListener('submit', function(e) {
         e.preventDefault();
 
         const name = document.getElementById('cliente').value;
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function(){
             alert('Fecha de retorno debe ser después de fecha de alquiler.');
             return;
         }
-        if(!name || !videogame || !rentalDateInput.value || !returnDateInput.value){
+        if (!name || !videogame || !rentalDateInput.value || !returnDateInput.value) {
             alert('Todos los campos son obligatorios.');
             return;
         }
@@ -94,7 +94,8 @@ document.addEventListener('DOMContentLoaded', function(){
                 e.target.reset();
             }
         });
-    })
+    });
+
     document.getElementById('formularioCliente').addEventListener('submit', function(e) {
         e.preventDefault();
     
@@ -115,16 +116,17 @@ document.addEventListener('DOMContentLoaded', function(){
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                nombre: nombreInput,
-                email: emailInput,
-                telefono: telefonoInput
+                "nombre": nombreInput,
+                "email": emailInput,
+                "telefono": telefonoInput
             })
         })
-        .then(res => {
+        .then(async res => {
             if (res.ok) {
                 return res.json();
             } else {
-                throw new Error('No se pudo registrar el cliente.');
+                const errorData = await res.json();
+                throw new Error(errorData.error || 'No se pudo registrar el cliente.');
             }
         })
         .then(data => {
@@ -132,8 +134,8 @@ document.addEventListener('DOMContentLoaded', function(){
             e.target.reset();
         })
         .catch(err => {
-            console.error('Error:', err);
-            alert('No se pudo registrar el cliente. Verifique los datos e intente nuevamente.');
+            console.error('Error:', err.message);
+            alert(`No se pudo registrar el cliente. Error: ${err.message}`);
         });
     });
-})
+});
